@@ -1,0 +1,14 @@
+<ion-navbar [hideBackButton]=hideBackButton color="dark">
+  <button ion-button icon-only menuToggle *ngIf="menu">
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>
+    {{ title | truncate : 19 : "..." }}
+  </ion-title>
+  <ion-buttons end *ngIf="icon">
+    <button ion-button icon-end (click)="click($event)">
+      {{ iconLabel }}
+      <ion-icon [name]="icon"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-navbar>

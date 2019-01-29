@@ -1,0 +1,24 @@
+<ion-header>
+  <navbar 
+    [title]="blePrv.peripheral.name" 
+    (onClick)="goToHome($event)">
+  </navbar>
+</ion-header>
+
+<ion-content class="padding">
+  <div padding-top>
+    <display 
+      title="Altitude" 
+      [value]="blePrv.currentAltitude" 
+      unit="metres">
+    </display>
+  </div>
+  <br>
+  <ion-buttons padding>
+    <button ion-button block outline color="danger" (click)="disconnect()">Stop connection</button>
+  </ion-buttons>
+</ion-content>
+
+<ion-footer>
+  <footer label="Capsule Corp *"></footer>
+</ion-footer>

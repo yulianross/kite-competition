@@ -1,0 +1,39 @@
+<ion-header>
+  <navbar 
+    title="My experiences" 
+    hideBackButton=false>
+  </navbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="storagePrv.experiences.length > 0; then listExperiences else noExperiences"></div>
+</ion-content>
+
+<ion-footer>
+  <footer label="Capsule Corp *"></footer>
+</ion-footer>
+
+<ng-template #listExperiences>
+  <ion-content>
+    <ion-list>
+      <ion-item-sliding *ngFor="let experience of storagePrv.experiences; let i=index" (click)="goToExperience(experience, i)">
+        <ion-item>
+          <h2>{{ experience.title | truncate : 27 : "..." }}</h2>
+          <ion-icon name="arrow-forward" item-right color="default"></ion-icon>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="delete(i)">
+            <ion-icon name="trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </ion-content>
+</ng-template>
+
+<ng-template #noExperiences>
+  <div text-center>
+    <h5>There are still no experiences</h5>
+  </div>
+</ng-template>

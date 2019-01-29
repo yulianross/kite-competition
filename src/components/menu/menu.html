@@ -1,0 +1,22 @@
+<ion-menu [enabled]=active id="main-menu" [content]="content" side="left">
+  <ion-header>
+    <ion-toolbar color="default">
+      <ion-title>Kite Competition</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="goTo('HomePage')">
+        <ion-icon name="home"></ion-icon>
+        Home
+      </button>
+      <button ion-item (click)="goTo('MyExperiencesPage')">
+        <ion-icon name="planet"></ion-icon>
+        My experiences
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+
+

@@ -38,7 +38,9 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #1f1d1d,
+  blue:       #073aa8,
+  default:    #09b1c7
 );
 
 
@@ -53,8 +55,7 @@ $colors: (
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
-
-
+$loading-md-spinner-color: color($colors, default);
 
 // App Windows Variables
 // --------------------------------------------------

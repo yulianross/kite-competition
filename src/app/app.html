@@ -1,1 +1,7 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<menu
+  [content]="content"
+  [active]="menuActive">
+</menu> 
+
+<ion-nav #content [root]="rootPage"></ion-nav>
+

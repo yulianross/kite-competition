@@ -1,0 +1,28 @@
+display {
+
+    h3 {
+        text-align: center;
+    }
+
+    svg.progress-circle text {
+        fill: color($colors, dark);;
+        font-family: 'Roboto', arial;
+    }
+
+    svg.progress-circle circle.progress {
+        stroke: color($colors, default);;
+    }
+
+    svg.progress-circle circle.black {
+        stroke: color($colors, dark);
+    }
+
+    svg {
+        display: block;
+        margin: auto;
+    }
+
+    
+
+    
+}

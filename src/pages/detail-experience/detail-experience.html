@@ -1,0 +1,75 @@
+<ion-header>
+  <navbar 
+    [title]="experience.title" 
+    icon="more" 
+    (onClick)="openPopover($event)" 
+    hideBackButton=false>
+  </navbar>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="analytics"></ion-icon>
+        Measures
+      </ion-card-header>
+      <ion-card-content>
+        <line-chart 
+          [title]="experience.totalTime" 
+          legend="Altitude(m)" 
+          labelX="time(seconds)" 
+          [data]="experience.altitudes">
+        </line-chart>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="paper-plane"></ion-icon>
+        Max altitude
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+    
+            </ion-col>
+            <ion-col col-8>
+              <display 
+                [value]="experience.altitudeValue" 
+                unit="metres">
+              </display>
+            </ion-col>
+            <ion-col>
+    
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  
+  <ion-card>
+    <ion-card-header>
+      <ion-icon name="compass"></ion-icon>
+      Location
+    </ion-card-header>
+    <ion-card-content>
+      <google-map [lat]="experience.coords.lat" [lng]="experience.coords.lng">
+      </google-map>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-icon name="calendar" icon-end></ion-icon>
+      Date
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ experience.date | date:'EEEE,' }}</p>
+      <p>{{ experience.date | date:'MMM d, y,' }}</p>
+      <p>{{ experience.date | date:'HH:mm' }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <footer label="Capsule Corp *"></footer>
+</ion-footer>

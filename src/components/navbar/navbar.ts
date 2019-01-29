@@ -1,11 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { MenuController } from 'ionic-angular';
-
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'navbar',
   templateUrl: 'navbar.html'
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
 
   @Input('title') title : string;
   @Input('iconLabel') iconLabel : string;
@@ -15,19 +13,8 @@ export class NavbarComponent implements OnInit {
 
   @Output() private onClick = new EventEmitter<any>();
 
-  constructor(
-    private menuCtrl: MenuController) {
-    
+  constructor() { 
     console.log('Hello NavbarComponent Component');
-  }
-
-  ngOnInit() {
-    console.log("ngOnInit");
-    // if (this.menu) {
-    //   this.menuCtrl.enable(true, 'main-menu');
-    // } else {
-    //   this.menuCtrl.enable(false, 'main-menu');
-    // }
   }
 
   click(event) {

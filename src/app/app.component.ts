@@ -50,7 +50,7 @@ export class MyApp {
     });
 
     app.viewDidEnter.subscribe((view) => {
-      this.menuActive = view.instance.menuActive || false;
+      this.menuActive = view.instance.menuActive === false ? false: true;
     });
   }
 }

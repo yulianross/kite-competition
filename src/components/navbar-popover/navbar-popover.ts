@@ -12,6 +12,8 @@ import { NavParams, ViewController } from 'ionic-angular';
 })
 export class NavbarPopoverComponent {
 
+  menuActive: boolean = false;
+
   items: object[] = [];
 
   text: string;
@@ -21,6 +23,7 @@ export class NavbarPopoverComponent {
     private viewCtrl: ViewController) {
 
     this.items = this.navParams.get('items');
+    this.menuActive = this.navParams.get('menuActive');
   }
 
   click(action) {

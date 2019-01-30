@@ -56,6 +56,8 @@ $colors: (
 // Material Design only Sass variables can go here
 
 $loading-md-spinner-color: color($colors, default);
+$alert-md-button-text-color: color($colors, default);
+$alert-md-input-border-color-focused: color($colors, default);
 
 // App Windows Variables
 // --------------------------------------------------

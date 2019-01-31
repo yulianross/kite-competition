@@ -149,7 +149,9 @@ export class BleProvider {
       // registra el tiempo de la medida actual, en segundos
       let timeValue = Math.round(moment.duration(now.diff(this.firstTime)).asSeconds());
 
-      this.currentAltitude = data[0];
+      // para valores negativos, se asigna el valor 0
+      this.currentAltitude = data[0] >= 0 ? data[0]: 0;
+
       this.altitudeValues.push({ x: timeValue, y: data[0] }); 
     });
   }

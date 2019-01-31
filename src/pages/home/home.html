@@ -21,7 +21,7 @@
       </ion-row>
     </ion-item>
   </ion-list>
-  <ion-grid *ngIf="showInfoScan">
+  <ion-grid *ngIf="showInfoScan && blePrv.devices.length === 0">
     <ion-row>
       <ion-col text-center>
         <h5>Find your device</h5>

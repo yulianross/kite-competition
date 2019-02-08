@@ -105,44 +105,44 @@ export class ResumePage {
   }
 
   save() {
-    const prompt = this.alertCtrl.create({
-      title: 'Title',
-      message: "Enter a name for the experience",
-      inputs: [
-        {
-          name: 'title',
-          placeholder: 'Title'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            this.experiencie = {
-              title: data.title || 'untitled',
-              altitudes: this.altitudes,
-              totalTime: this.totalTimeText,
-              date: this.date,
-              altitudeValue: this.maxAltitude,
-              coords: this.coords
-            };
-            this.storagePrv.addExperience(this.experiencie)
-            .then(() => {
-              // quitar ruleta de carga
-              this.goToHome();
-            });    
-          }
-        }
-      ]
-    });
+    // const prompt = this.alertCtrl.create({
+    //   title: 'Title',
+    //   message: "Enter a name for the experience",
+    //   inputs: [
+    //     {
+    //       name: 'title',
+    //       placeholder: 'Title'
+    //     },
+    //   ],
+    //   buttons: [
+    //     {
+    //       text: 'Cancel',
+    //       handler: data => {
+    //         console.log('Cancel clicked');
+    //       }
+    //     },
+    //     {
+    //       text: 'Save',
+    //       handler: data => {
+    //         this.experiencie = {
+    //           title: data.title || 'untitled',
+    //           altitudes: this.altitudes,
+    //           totalTime: this.totalTimeText,
+    //           date: this.date,
+    //           altitudeValue: this.maxAltitude,
+    //           coords: this.coords
+    //         };
+    //         this.storagePrv.addExperience(this.experiencie)
+    //         .then(() => {
+    //           // quitar ruleta de carga
+    //           this.goToHome();
+    //         });    
+    //       }
+    //     }
+    //   ]
+    // });
 
-    prompt.present();
+    // prompt.present();
   }
 
   dismiss() {

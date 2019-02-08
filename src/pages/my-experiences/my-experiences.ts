@@ -28,10 +28,10 @@ export class MyExperiencesPage {
   }
 
   delete(index) {
-    this.storagePrv.deleteExperience(index)
-    .then(() => {
-      // quitar ruleta de carga
-    });
+    // this.storagePrv.deleteExperience(index)
+    // .then(() => {
+    //   // quitar ruleta de carga
+    // });
   }
 
 }

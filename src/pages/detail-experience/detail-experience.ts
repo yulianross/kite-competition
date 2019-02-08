@@ -58,11 +58,11 @@ export class DetailExperiencePage {
   }
 
   delete() {
-    this.storagePrv.deleteExperience(this.indexList)
-    .then(() => {
-      // quitar ruleta de carga
-      this.navCtrl.pop();
-    }); 
+    // this.storagePrv.deleteExperience(this.indexList)
+    // .then(() => {
+    //   // quitar ruleta de carga
+    //   this.navCtrl.pop();
+    // }); 
   }
 
 }

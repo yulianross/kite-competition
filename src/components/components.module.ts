@@ -36,7 +36,7 @@ import { TruncateModule } from 'ng2-truncate';
                 AgmCoreModule.forRoot({
                         apiKey: 'AIzaSyATjj5sEL6bUg-9eRkI2A_r2upscMaBHnA'
                 }),
-                TruncateModule,
+                TruncateModule
         ],
     
 	exports: [

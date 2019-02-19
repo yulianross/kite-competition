@@ -86,7 +86,7 @@
     <engine name="android" spec="6.3.0" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.3" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^2.3.1" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^2.3.3" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
@@ -99,4 +99,5 @@
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.162694308943-ou5uh13sj7ph4lb3do2m27gi63grp6n7" />
         <variable name="PLAY_SERVICES_VERSION" value="11.8.0" />
     </plugin>
+    <plugin name="cordova-plugin-file" spec="^6.0.1" />
 </widget>

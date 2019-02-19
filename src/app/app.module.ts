@@ -10,6 +10,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
 import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { IonicImageLoader } from 'ionic-image-loader';
 
 // providers
 
@@ -33,7 +34,7 @@ import { MeasurementPage } from '../pages/measurement/measurement';
 import { DetailExperiencePage } from '../pages/detail-experience/detail-experience';
 import { LoginPage } from '../pages/login/login';
 import { UserPage } from '../pages/user/user';
-
+import { GlobalRankingPage } from '../pages/global-ranking/global-ranking';
 
 
 // pipes
@@ -41,9 +42,8 @@ import { TruncateModule } from 'ng2-truncate';
 
 // firebase
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { firebaseConfig } from '../config/firebase';
 
 
@@ -56,7 +56,8 @@ import { firebaseConfig } from '../config/firebase';
     MeasurementPage,
     DetailExperiencePage,
     LoginPage,
-    UserPage
+    UserPage,
+    GlobalRankingPage
   ],
   imports: [
     BrowserModule,
@@ -65,9 +66,9 @@ import { firebaseConfig } from '../config/firebase';
     ComponentsModule,
     TruncateModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireDatabaseModule,
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    IonicImageLoader.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -79,12 +80,13 @@ import { firebaseConfig } from '../config/firebase';
     DetailExperiencePage,
     LoginPage,
     UserPage,
+    GlobalRankingPage,
     NavbarPopoverComponent
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     BLE,
     BleProvider,
     Geolocation,
@@ -94,7 +96,8 @@ import { firebaseConfig } from '../config/firebase';
     Facebook,
     GooglePlus,
     LoaderProvider,
-    FirebaseProvider
+    FirebaseProvider,
+    { provide: FirestoreSettingsToken, useValue: {} }
   ]
 })
 export class AppModule {}

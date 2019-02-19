@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Credentials } from '../../interfaces/credentials';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,6 +13,7 @@ import { LoaderProvider } from '../loader/loader';
 export class UserProvider {
 
   user: Credentials = {};
+  userfirebaseLoaded: boolean = false;
 
   constructor(
     private fb: Facebook,
@@ -22,41 +24,42 @@ export class UserProvider {
 
   }
 
-  loadUser(user) {
-    this.user.name = user.displayName;
-    this.user.mail = user.email; 
-    this.user.img = user.photoURL; 
-    this.user.uid = user.uid; 
-    this.user.provider = this.getLoginProvider(user.photoURL);
+  setUser(user) {
+    this.user.displayName = user.displayName;
+    this.user.email = user.email;
+    this.user.photoURL = user.photoURL;
+    this.user.uid = user.uid;
+    this.user.provider = user.provider || this.getLoginProvider(user.photoURL);
+    this.user.experiences = user.experiences ? this.parseDateExperiences(user.experiences) : [];
   }
 
   signInWithFacebook() {
     if (this.platform.is('cordova')) {
       return this.fb.login(['email', 'public_profile'])
-      .then(res => {
-        const facebookCredential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
-        
-        return this.loaderPrv.startLoader('logging in...')
-        .then(() => {
-         return  firebase.auth().signInAndRetrieveDataWithCredential(facebookCredential)
-          .then((res) => {
-            this.loadUser(res.user);
+        .then(res => {
+          const facebookCredential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
 
-            return this.loaderPrv.dismissLoader();
-          });
-        }); 
-      });
-    } else {
-      return this.loaderPrv.startLoader('logging in...').then(() => {
-        return this.afAuth.auth
-        .signInWithPopup(new firebase.auth.FacebookAuthProvider())
-        .then((res) => {
-          this.loadUser(res.user);
-
-          return this.loaderPrv.dismissLoader();
+          return this.loaderPrv.startLoader('logging in...')
+            .then(() => {
+              return firebase.auth().signInAndRetrieveDataWithCredential(facebookCredential)
+                .then((res) => {
+                  this.setUser(res.user);
+                        
+                  return this.loaderPrv.dismissLoader();
+                });
+            });
         });
-      });
-    }  
+    } else {
+      return this.loaderPrv.startLoader('logging in...')
+        .then(() => {
+          return this.afAuth.auth
+            .signInWithPopup(new firebase.auth.FacebookAuthProvider())
+            .then((res) => {
+              this.setUser(res.user);
+              return this.loaderPrv.dismissLoader();
+            });
+        });
+    }
   }
 
   signInWithGoogle() {
@@ -65,38 +68,47 @@ export class UserProvider {
         webClientId,
         'offline': true
       })
-      .then((res) => {
-        return this.loaderPrv.startLoader('logging in...')
-        .then(() => {
-          return firebase.auth().signInAndRetrieveDataWithCredential(firebase.auth.GoogleAuthProvider.credential(res.idToken))
-          .then((res) => {
-            this.loadUser(res.user);
+        .then((res) => {
+          return this.loaderPrv.startLoader('logging in...')
+            .then(() => {
+              return firebase.auth().signInAndRetrieveDataWithCredential(firebase.auth.GoogleAuthProvider.credential(res.idToken))
+                .then((res) => {
+                  this.setUser(res.user);
 
-            return this.loaderPrv.dismissLoader();
-          });
+                  return this.loaderPrv.dismissLoader();
+                });
+            });
+        })
+        .catch((err) => {
+          return err;
         });
-      }) 
-      .catch((err) => {
-        console.error('error: ', err);
-      });
-    } 
+    }
   }
 
   logout() {
-    return this.loaderPrv.startLoader('logging in...')
-    .then(() => {
-      return this.afAuth.auth.signOut()
+    return this.loaderPrv.startLoader('logging out...')
       .then(() => {
-        this.user = {};
-        
-        return this.loaderPrv.dismissLoader();
+        return this.afAuth.auth.signOut()
+          .then(() => {
+            this.user = {};
+            this.userfirebaseLoaded = false;
+
+            return this.loaderPrv.dismissLoader();
+          });
       });
-    });  
   }
 
-  getLoginProvider(url: string) {
-    return url.includes('facebook') ? 'facebook':
-           url.includes('google') ? 'google': 
-           '';
+  private getLoginProvider(url: string) {
+    return url.includes('facebook') ? 'facebook' :
+      url.includes('google') ? 'google' :
+        '';
+  }
+
+  private parseDateExperiences(eperiences: any[]) {
+    return eperiences.map((experince) => {
+     experince.date = moment(new Date(experince.date));
+     
+     return experince;
+    });
   }
 }

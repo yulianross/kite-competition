@@ -11,6 +11,7 @@ import { UserProvider } from '../../providers/user/user';
 export class UserPage {
 
   user: Credentials = {};
+  spinner: boolean = true;
 
   constructor(
     public navCtrl: NavController, 
@@ -19,5 +20,9 @@ export class UserPage {
 
       this.user = this.userPrv.user;
 
+  }
+
+  onImageLoad(event) {
+    console.log(event);
   }
 }

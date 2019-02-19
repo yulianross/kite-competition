@@ -6,7 +6,7 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="storagePrv.experiences.length > 0; then listExperiences else noExperiences"></div>
+  <div *ngIf="userPrv.user.experiences && userPrv.user.experiences.length > 0; then listExperiences else noExperiences"></div>
 </ion-content>
 
 <ion-footer>
@@ -16,8 +16,8 @@
 <ng-template #listExperiences>
   <ion-content>
     <ion-list>
-      <ion-item-sliding *ngFor="let experience of storagePrv.experiences; let i=index" (click)="goToExperience(experience, i)">
-        <ion-item>
+      <ion-item-sliding *ngFor="let experience of userPrv.user.experiences; let i=index">
+        <ion-item (click)="goToExperience(experience, i)">
           <h2>{{ experience.title | truncate : 27 : "..." }}</h2>
           <ion-icon name="arrow-forward" item-right color="default"></ion-icon>
         </ion-item>

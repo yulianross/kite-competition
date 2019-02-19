@@ -1,7 +1,8 @@
 export interface Credentials {
-    name?: string;
-    mail?: string; 
-    img?: string;
+    displayName?: string;
+    email?: string; 
+    photoURL?: string;
     uid?: string; 
-    provider?: string
+    provider?: string;
+    experiences?: any[];
 }

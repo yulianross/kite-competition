@@ -5,10 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { LoaderProvider } from '../providers/loader/loader';
-import { Storage } from '@ionic/storage';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { UserProvider } from '../providers/user/user';
-
+import firebase from 'firebase/app';
 @Component({
   templateUrl: 'app.html'
 })
@@ -23,25 +21,31 @@ export class MyApp {
     platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
-    app: App,
     loaderPrv: LoaderProvider,
-    menuCtrl: MenuController,
-    storage: Storage,
-    afAuth: AngularFireAuth,
-    userPrv: UserProvider) {
-
+    userPrv: UserProvider,
+    app: App,
+    menuCtrl: MenuController) {
+     
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
 
       let nav = app.getActiveNavs()[0];
-      let startingApp = true;
 
-      storage.ready()
-        .then(() => {
-          statusBar.styleDefault();
-          splashScreen.hide();
-        });
+      loaderPrv.startLoader('checking login...');
+      const unsubscribeAuth = firebase
+      .auth()
+      .onAuthStateChanged((user) => {
+        if (user) {
+          userPrv.setUser(user); 
+          nav.setRoot(HomePage);  
+        } else {
+          nav.setRoot(LoginPage);
+        }
+        
+        unsubscribeAuth();
+        loaderPrv.dismissLoader();
+      });
 
       if (platform.is('android')) {
         platform.registerBackButtonAction(() => {
@@ -61,25 +65,12 @@ export class MyApp {
         });
       }
 
-      loaderPrv.startLoader('checking login...')
-        .then(() => {
-          afAuth.authState.subscribe((user) => {
-            if (user && startingApp) {
-              userPrv.loadUser(user);
-              nav.setRoot(HomePage);
-            } else {
-              nav.setRoot(LoginPage);
-            }
-            if (startingApp) {
-              loaderPrv.dismissLoader();
-              startingApp = false;
-            }
-          });
-        });
-
       app.viewDidEnter.subscribe((view) => {
         this.menuActive = view.instance.menuActive === false ? false : true;
       });
+
+      statusBar.styleDefault();
+      splashScreen.hide();
     });
   }
 }

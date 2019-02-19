@@ -7,10 +7,10 @@
   <ion-list>
     <ion-item>
       <ion-avatar item-start>
-        <img [src]="user.img">
+        <img-loader [src]="user.photoURL" useImg spinner=true></img-loader>
       </ion-avatar>
-      <h2>{{ user.name }}</h2>
-      <p>{{ user.mail }}</p>
+      <h2>{{ user.displayName }}</h2>
+      <p>{{ user.email }}</p>
       <p>{{ user.provider }}</p>
     </ion-item>
   </ion-list>
@@ -19,3 +19,11 @@
 <ion-footer>
   <footer label="Capsule Corp "></footer>
 </ion-footer>
+
+<ng-template #spinner>
+    <ion-spinner name="bubbles"></ion-spinner>
+</ng-template>
+
+<ng-template #img>
+    <img [src]="user.photoURL" (load)="removeSpinner()">
+</ng-template>

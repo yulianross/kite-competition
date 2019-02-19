@@ -5,6 +5,7 @@ import { BleProvider } from '../../providers/ble/ble';
 import { MeasurementPage } from '../measurement/measurement';
 import { UserProvider } from '../../providers/user/user';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
+import * as moment from 'moment';
 
 @Component({
   selector: 'page-home',
@@ -28,17 +29,23 @@ export class HomePage implements OnInit {
     private loadingCtrl: LoadingController,
     private userPrv: UserProvider,
     private firebasePrv: FirebaseProvider) {
-      console.log('constructor home');
-
+      
   }
 
   ngOnInit() {
-    const toast = this.toastCtrl.create({
-      message: `Welcome ${this.userPrv.user.name}!`,
-      position: 'bottom',
-      duration: 3000
-    });
-    toast.present();
+
+    if (!this.userPrv.userfirebaseLoaded) {
+      console.log('cargando usuario de firebase');
+      this.firebasePrv.loadUser()
+      .then(() => {
+        const toast = this.toastCtrl.create({
+          message: `Welcome ${this.userPrv.user.displayName}!`,
+          position: 'bottom',
+          duration: 3000
+        });
+        toast.present();
+      });
+    } 
   }
 
   connectRaspberry(device) {

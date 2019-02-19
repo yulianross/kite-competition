@@ -4,8 +4,9 @@ import { NavController, NavParams, PopoverController, AlertController } from 'io
 import { NavbarPopoverComponent } from '../../components/navbar-popover/navbar-popover';
 import { LocationProvider } from '../../providers/location/location';
 import { BleProvider } from '../../providers/ble/ble';
-import { StorageProvider } from '../../providers/storage/storage';
 import { HomePage } from '../home/home';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { LoaderProvider } from '../../providers/loader/loader';
 
 @Component({
   selector: 'page-resume',
@@ -53,12 +54,13 @@ export class ResumePage {
     public navParams: NavParams,
     public popoverCtrl: PopoverController,
     private locationPrv: LocationProvider,
-    private blePvr: BleProvider,
-    private storagePrv: StorageProvider,
-    private alertCtrl: AlertController) {
+    private blePrv: BleProvider,
+    private alertCtrl: AlertController,
+    private firebasePrv: FirebaseProvider,
+    private loaderPrv: LoaderProvider) {
       
-    this.altitudes = this.blePvr.altitudeValues;
-    const lastTimeValue = this.blePvr.altitudeValues[this.blePvr.altitudeValues.length -1].x;
+    this.altitudes = this.blePrv.altitudeValues;
+    const lastTimeValue = this.blePrv.altitudeValues[this.blePrv.altitudeValues.length -1].x;
     const formattedTime = moment().startOf('day').seconds(lastTimeValue).format('HH:mm:ss');
     this.totalTimeText = `Total time: ${formattedTime}`;
     this.maxAltitude = this.getMaxAltitude(this.altitudes);
@@ -99,58 +101,64 @@ export class ResumePage {
       if (action === 'save') {
         this.save();
       } else if (action === 'dismiss') {
-        this.dismiss();
+        this.goToHome();
       }
     });
   }
 
   save() {
-    // const prompt = this.alertCtrl.create({
-    //   title: 'Title',
-    //   message: "Enter a name for the experience",
-    //   inputs: [
-    //     {
-    //       name: 'title',
-    //       placeholder: 'Title'
-    //     },
-    //   ],
-    //   buttons: [
-    //     {
-    //       text: 'Cancel',
-    //       handler: data => {
-    //         console.log('Cancel clicked');
-    //       }
-    //     },
-    //     {
-    //       text: 'Save',
-    //       handler: data => {
-    //         this.experiencie = {
-    //           title: data.title || 'untitled',
-    //           altitudes: this.altitudes,
-    //           totalTime: this.totalTimeText,
-    //           date: this.date,
-    //           altitudeValue: this.maxAltitude,
-    //           coords: this.coords
-    //         };
-    //         this.storagePrv.addExperience(this.experiencie)
-    //         .then(() => {
-    //           // quitar ruleta de carga
-    //           this.goToHome();
-    //         });    
-    //       }
-    //     }
-    //   ]
-    // });
+    const prompt = this.alertCtrl.create({
+      title: 'Title',
+      message: "Enter a name for the experience",
+      inputs: [
+        {
+          name: 'title',
+          placeholder: 'Title'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.experiencie = {
+              title: data.title || 'untitled',
+              altitudes: this.altitudes,
+              totalTime: this.totalTimeText,
+              date: this.date,
+              altitudeValue: this.maxAltitude,
+              coords: this.coords
+            };
+            
+            this.loaderPrv.startLoader('saving experience...')
+            .then(() => {
+              this.firebasePrv.saveExperience(this.experiencie)
+              .then(() => {
+                this.loaderPrv.dismissLoader()
+                .then(() => {
+                  this.goToHome();
+                });
+              });  
+            });    
+          }
+        }
+      ]
+    });
 
-    // prompt.present();
-  }
-
-  dismiss() {
-    this.goToHome();
+    prompt.present();
   }
 
   goToHome() {
     this.navCtrl.setRoot(HomePage);
+  }
+
+  dismiss() {
+    this.goToHome();
   }
 
   getMaxAltitude(data) {

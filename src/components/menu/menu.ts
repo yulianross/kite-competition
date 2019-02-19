@@ -5,6 +5,9 @@ import { HomePage } from '../../pages/home/home';
 import { UserPage } from '../../pages/user/user';
 import { UserProvider } from '../../providers/user/user';
 import { LoginPage } from '../../pages/login/login';
+import { GlobalRankingPage } from '../../pages/global-ranking/global-ranking';
+
+
 @Component({
   selector: 'menu',
   templateUrl: 'menu.html'
@@ -16,7 +19,8 @@ export class MenuComponent {
   private objectPage: any = {
     MyExperiencesPage,
     HomePage,
-    UserPage
+    UserPage,
+    GlobalRankingPage
   }
 
   constructor(

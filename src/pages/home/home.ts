@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ToastController, LoadingController } from 'ionic-angular';
-import { LocationProvider } from '../../providers/location/location';
 import { BleProvider } from '../../providers/ble/ble';
 import { MeasurementPage } from '../measurement/measurement';
+import { UserProvider } from '../../providers/user/user';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
+import * as moment from 'moment';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
   /**
    * menuActive property
@@ -24,9 +27,25 @@ export class HomePage {
     public toastCtrl: ToastController,
     private blePrv: BleProvider,
     private loadingCtrl: LoadingController,
-    public locationPrv: LocationProvider) {
+    private userPrv: UserProvider,
+    private firebasePrv: FirebaseProvider) {
+      
+  }
 
-    this.locationPrv.initGeolocation();
+  ngOnInit() {
+
+    if (!this.userPrv.userfirebaseLoaded) {
+      console.log('cargando usuario de firebase');
+      this.firebasePrv.loadUser()
+      .then(() => {
+        const toast = this.toastCtrl.create({
+          message: `Welcome ${this.userPrv.user.displayName}!`,
+          position: 'bottom',
+          duration: 3000
+        });
+        toast.present();
+      });
+    } 
   }
 
   connectRaspberry(device) {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage , NavController} from 'ionic-angular';
+import { IonicPage , NavController, AlertController} from 'ionic-angular';
 import { BleProvider } from '../../providers/ble/ble';
 import { ResumePage } from '../resume/resume';
 
@@ -19,7 +19,8 @@ export class MeasurementPage {
   
   constructor(
     private blePrv: BleProvider,
-    private navCtrl: NavController) {
+    private navCtrl: NavController,
+    private alertCtrl: AlertController) {
 
   }
 
@@ -37,15 +38,33 @@ export class MeasurementPage {
   }
 
   /**
-   * disconnect Action
+   * finishFlight Action
    * stopNotify and disconnect bluetooth client
    * @return void
    */
-  disconnect() {
-    this.blePrv.disconnectDevice()
-    .then(() => {
-      this.navCtrl.push(ResumePage);
-    });
+  finishFlight() {
+    if(this.blePrv.altitudeValues.length > 0) {
+      this.blePrv.disconnectDevice()
+      .then(() => {
+        this.navCtrl.push(ResumePage);
+      });
+    } else {
+      const alert = this.alertCtrl.create({
+        title: 'No measures',
+        subTitle: 'it seems that you did not receive any measure. Try connect again',
+        buttons: [{
+          text: 'OK',
+          handler: data => {
+            this.blePrv.disconnectDevice()
+            .then(() => {
+              this.navCtrl.pop();
+            });
+          }
+        }]
+      });
+      alert.present();
+    }
+   
   }
 }
 

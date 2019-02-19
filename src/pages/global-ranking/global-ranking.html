@@ -1,0 +1,33 @@
+<ion-header>
+  <navbar title="Global Ranking" menu=true>
+  </navbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Max altitude</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let experience of bestExperiences; let i = index">
+            <td class="rank">{{ i + 1 }}
+              <ion-icon  *ngIf="i === 0" name="medal"></ion-icon>
+            </td>
+            <td class="team">{{ experience.nameUser }}</td>
+            <td class="points">{{ experience.altitude }} m</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <footer label="Capsule Corp "></footer>
+</ion-footer>

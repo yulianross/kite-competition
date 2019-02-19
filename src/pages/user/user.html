@@ -1,0 +1,29 @@
+<ion-header>
+  <navbar title="My profile">
+  </navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-avatar item-start>
+        <img-loader [src]="user.photoURL" useImg spinner=true></img-loader>
+      </ion-avatar>
+      <h2>{{ user.displayName }}</h2>
+      <p>{{ user.email }}</p>
+      <p>{{ user.provider }}</p>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <footer label="Capsule Corp "></footer>
+</ion-footer>
+
+<ng-template #spinner>
+    <ion-spinner name="bubbles"></ion-spinner>
+</ng-template>
+
+<ng-template #img>
+    <img [src]="user.photoURL" (load)="removeSpinner()">
+</ng-template>

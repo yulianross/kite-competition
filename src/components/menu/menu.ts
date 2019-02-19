@@ -2,6 +2,11 @@ import { Component, Input } from '@angular/core';
 import { MyExperiencesPage } from '../../pages/my-experiences/my-experiences';
 import { MenuController } from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
+import { UserPage } from '../../pages/user/user';
+import { UserProvider } from '../../providers/user/user';
+import { LoginPage } from '../../pages/login/login';
+import { GlobalRankingPage } from '../../pages/global-ranking/global-ranking';
+
 
 @Component({
   selector: 'menu',
@@ -13,11 +18,14 @@ export class MenuComponent {
 
   private objectPage: any = {
     MyExperiencesPage,
-    HomePage
+    HomePage,
+    UserPage,
+    GlobalRankingPage
   }
 
   constructor(
-    public menuCtrl: MenuController) {
+    public menuCtrl: MenuController,
+    private userPrv: UserProvider) {
   }
 
   goTo(pageName: string) {
@@ -30,5 +38,12 @@ export class MenuComponent {
     }
 
     this.menuCtrl.close();
+  }
+
+  logout() {
+    this.userPrv.logout()
+    .then(() => {
+      this.content.setRoot(LoginPage);
+    });
   }
 }

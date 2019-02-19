@@ -1,81 +1,48 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Platform, LoadingController } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 
 
 @Injectable()
 export class StorageProvider {
-
-  experiences: any[] = []; 
-
+  
   constructor(
     private storage: Storage,
-    private platform: Platform,
-    private loadingCtrl: LoadingController) {
+    private platform: Platform) {
 
     console.log('Hello StorageProvider Provider');
   }
 
-  loadStorage() {
-
-    return new Promise((resolve, reject) => {
-      if (this.platform.is('cordova')) {
-        // device
-        this.storage.ready()
-        .then(() => {
-          this.storage.get('experiences')
-          .then((experiences) => {
-            this.experiences = experiences || [];
-            resolve();
-          });  
+  getStorage(name) {
+    if(this.platform.is('cordova')) {
+      return this.storage.ready()
+      .then(() => {
+        return this.storage.get(name);
+      })
+    } else {
+      if(localStorage.getItem(name)) {
+        return new Promise((resolve, reject) => {
+          resolve(JSON.parse(localStorage.getItem(name)));
         });
       } else {
-        // browser
-        if (localStorage.getItem('experiences')) {
-          this.experiences = JSON.parse(localStorage.getItem('experiences'));
-        }
-        resolve(); 
+        return new Promise((resolve) => {
+          resolve(null);
+        })
       }
-    });
+    }
   }
 
-  saveStorage() {
-    const loader = this.loadingCtrl.create({
-      content: 'saving data...'
-    });
-
-    return new Promise((resolve, reject) => {
-      loader.present()
-        .then(() => {
-          if (this.platform.is('cordova')) {
-            // device
-            this.storage.ready()
-            .then(() => {
-              this.storage.set('experiences', this.experiences)
-              .then(() => {
-                loader.dismiss();
-                resolve();
-              });
-            });
-          } else {
-            // browser
-            localStorage.setItem('experiences', JSON.stringify(this.experiences));
-            loader.dismiss();
-            resolve();
-          }
-        });
-    });
-  }
-
-  addExperience(experience) {
-    this.experiences.push(experience);
-
-    return this.saveStorage();
-  }
-
-  deleteExperience(index) {
-    this.experiences.splice(index, 1);
-
-    return this.saveStorage();
+  saveStorage(name: string, value: any) {
+    if(this.platform.is('cordova')) {
+      return this.storage.ready()
+      .then(() => {
+        return this.storage.set(name, value);
+      });
+    } else {
+      return new Promise((resolve, reject) => {
+        localStorage.setItem(name, JSON.stringify(value));
+        resolve();
+      }); 
+    }
   }
 }

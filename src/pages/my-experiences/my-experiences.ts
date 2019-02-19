@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { StorageProvider } from '../../providers/storage/storage';
+import { UserProvider } from '../../providers/user/user';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { LoaderProvider } from '../../providers/loader/loader';
 import { DetailExperiencePage } from '../detail-experience/detail-experience';
-
 @Component({
   selector: 'page-my-experiences',
   templateUrl: 'my-experiences.html',
@@ -19,7 +20,9 @@ export class MyExperiencesPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    private storagePrv: StorageProvider) {
+    private userPrv: UserProvider,
+    private firebasePrv: FirebaseProvider,
+    private loaderPrv: LoaderProvider) {
 
   }
 
@@ -28,10 +31,13 @@ export class MyExperiencesPage {
   }
 
   delete(index) {
-    this.storagePrv.deleteExperience(index)
+    this.loaderPrv.startLoader('deleting experience...')
     .then(() => {
-      // quitar ruleta de carga
-    });
+      this.firebasePrv.deleteExperience(index)
+      .then(() => {
+        this.loaderPrv.dismissLoader();
+      });
+    }); 
   }
 
 }

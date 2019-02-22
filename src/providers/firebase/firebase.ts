@@ -1,18 +1,28 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { UserProvider } from '../user/user';
-
+import { LoaderProvider } from '../loader/loader';
+import firebase from 'firebase/app';
 @Injectable()
 export class FirebaseProvider {
 
   constructor(
     private afDB: AngularFirestore,
     private userPrv: UserProvider) {
+  }
 
+  checkUserLogged() {
+    return new Promise((resolve, reject) => {
+      const unsubscribeAuth = firebase
+      .auth()
+      .onAuthStateChanged((user) => {
+        unsubscribeAuth();
+        resolve(user);
+      });  
+    });
   }
 
   loadUser() {
-
     return this.afDB.doc(`users/${ this.userPrv.user.uid }`)
       .get()
       .toPromise()

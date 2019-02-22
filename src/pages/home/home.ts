@@ -21,6 +21,7 @@ export class HomePage implements OnInit {
   menuActive: boolean = true;
 
   showInfoScan: boolean = true;
+  currentAltitude: number = 0;
 
   constructor(
     public navCtrl: NavController,
@@ -29,11 +30,11 @@ export class HomePage implements OnInit {
     private loadingCtrl: LoadingController,
     private userPrv: UserProvider,
     private firebasePrv: FirebaseProvider) {
+      console.log('home page');
       
   }
 
   ngOnInit() {
-
     if (!this.userPrv.userfirebaseLoaded) {
       console.log('cargando usuario de firebase');
       this.firebasePrv.loadUser()
@@ -96,5 +97,9 @@ export class HomePage implements OnInit {
             console.log('error al abrir los settings');
           });
       });
+  }
+
+  initCounter() {
+    this.currentAltitude += 1;
   }
 }

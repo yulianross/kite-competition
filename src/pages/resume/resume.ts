@@ -7,6 +7,7 @@ import { BleProvider } from '../../providers/ble/ble';
 import { HomePage } from '../home/home';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
+import * as utils from '../../utils/utils';
 
 @Component({
   selector: 'page-resume',
@@ -63,7 +64,7 @@ export class ResumePage {
     const lastTimeValue = this.blePrv.altitudeValues[this.blePrv.altitudeValues.length -1].x;
     const formattedTime = moment().startOf('day').seconds(lastTimeValue).format('HH:mm:ss');
     this.totalTimeText = `Total time: ${formattedTime}`;
-    this.maxAltitude = this.getMaxAltitude(this.altitudes);
+    this.maxAltitude = utils.getMaxAltitude(this.altitudes);
     this.date = moment(new Date());
 
     // get geolocation
@@ -159,14 +160,5 @@ export class ResumePage {
 
   dismiss() {
     this.goToHome();
-  }
-
-  getMaxAltitude(data) {
-
-    const altitudes = data.map((altitude) => {
-      return altitude.y;
-    });
-
-    return Math.max.apply(null, altitudes);
   }
 }

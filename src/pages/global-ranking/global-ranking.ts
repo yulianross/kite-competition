@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
 
-@IonicPage()
+
 @Component({
   selector: 'page-global-ranking',
   templateUrl: 'global-ranking.html',

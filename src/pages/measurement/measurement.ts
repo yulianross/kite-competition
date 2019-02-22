@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage , NavController, AlertController} from 'ionic-angular';
+import { NavController, AlertController} from 'ionic-angular';
 import { BleProvider } from '../../providers/ble/ble';
 import { ResumePage } from '../resume/resume';
 
-@IonicPage()
 @Component({
   selector: 'page-measurement',
   templateUrl: 'measurement.html',

@@ -20,6 +20,8 @@ import { StorageProvider } from '../providers/storage/storage';
 import { UserProvider } from '../providers/user/user';
 import { LoaderProvider } from '../providers/loader/loader';
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import { PopoverProvider } from '../providers/popover/popover';
+
 
 // components
 import { ComponentsModule } from '../components/components.module';
@@ -88,16 +90,18 @@ import { firebaseConfig } from '../config/firebase';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     BLE,
-    BleProvider,
     Geolocation,
-    LocationProvider,
-    StorageProvider,
-    UserProvider,
     Facebook,
     GooglePlus,
     LoaderProvider,
+    { provide: FirestoreSettingsToken, useValue: {}},
     FirebaseProvider,
-    { provide: FirestoreSettingsToken, useValue: {} }
+    BleProvider,
+    LocationProvider,
+    StorageProvider,
+    UserProvider,
+    PopoverProvider,
+    
   ]
 })
 export class AppModule {}

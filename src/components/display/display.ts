@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 /**
  * Generated class for the DisplayComponent component.
@@ -10,14 +10,31 @@ import { Component, Input } from '@angular/core';
   selector: 'display',
   templateUrl: 'display.html'
 })
-export class DisplayComponent {
+export class DisplayComponent implements OnChanges {
 
   @Input('title') title : string;
   @Input('value') value : number;
   @Input('unit') unit : string;
+  @Input('rangeBlink') rangeBlink : number;
+
+  blink:boolean = false;
+  maxValue: number = 0;
 
   constructor() {
     console.log('Hello DisplayComponent Component');
   }
 
+  ngOnChanges() {
+    if(this.rangeBlink) {
+      let rest = this.value % this.rangeBlink;
+
+      if(rest === 0 && this.value > this.maxValue) {
+        this.blink = true;
+        this.maxValue = this.value;
+        setTimeout(() => {
+          this.blink = false;
+        }, 5000);
+      } 
+    } 
+  }
 }

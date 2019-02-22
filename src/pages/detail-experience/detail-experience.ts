@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, PopoverController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { NavbarPopoverComponent } from '../../components/navbar-popover/navbar-popover';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
+import { PopoverProvider } from '../../providers/popover/popover';
 
 @Component({
   selector: 'page-detail-experience',
@@ -30,9 +31,9 @@ export class DetailExperiencePage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    private popoverCtrl: PopoverController,
     private firebasePrv: FirebaseProvider,
-    private loaderPrv: LoaderProvider) {
+    private loaderPrv: LoaderProvider,
+    private popoverPrv: PopoverProvider) {
 
       this.experience = navParams.get('experience');
       this.indexList = navParams.get('index');
@@ -40,20 +41,14 @@ export class DetailExperiencePage {
   }
 
   openPopover(event: any) {
-    const popover = this.popoverCtrl.create(
-      NavbarPopoverComponent, 
-      { 
-        items: this.items,
+    const paramsPopover = {
+      items: this.items,
         menuActive: this.menuActive 
-      }
-    );
-
-    popover.present({
-      ev: event
-    });
-
-    popover.onWillDismiss((action) => {
-      if (action === 'delete') {
+    }
+    this.popoverPrv.openPopover(event, NavbarPopoverComponent, paramsPopover);
+    this.popoverPrv.onWillDismissEvent()
+    .then((action) => {
+      if(action === 'delete') {
         this.delete();
       }
     });
@@ -70,7 +65,5 @@ export class DetailExperiencePage {
         });
       });
     });
-   
   }
-
 }

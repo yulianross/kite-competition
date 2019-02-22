@@ -29,8 +29,8 @@ export class MenuComponent {
   }
 
   goTo(pageName: string) {
-    if (this.content.getActive().name !== pageName) {
-      if (pageName === 'HomePage') {
+    if (this.content.getActive().component !== this.objectPage[pageName]) {
+      if (this.objectPage[pageName] === HomePage) {
         this.content.setRoot(HomePage);  
       } else {
         this.content.push(this.objectPage[pageName]);  

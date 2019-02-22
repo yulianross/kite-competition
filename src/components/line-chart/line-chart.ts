@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import * as utils from '../../utils/utils';
 
 @Component({
   selector: 'line-chart',
@@ -42,8 +43,8 @@ export class LineChartComponent implements OnInit {
           display: true,
           ticks: {
             min: 0,
-            max: this.getMaxAltitude(this.data),
-            stepSize: Math.round(this.getMaxAltitude(this.data)/3)
+            max: utils.getMaxAltitude(this.data),
+            stepSize: Math.round(utils.getMaxAltitude(this.data)/3)
           }
         }],
         xAxes: [{
@@ -74,14 +75,5 @@ export class LineChartComponent implements OnInit {
     ];
 
     this.lineChartLegend = this.legend !== "" || false;
-  }
-
-  getMaxAltitude(data) {
-
-    const altitudes = data.map((altitude) => {
-      return altitude.y;
-    });
-
-    return Math.max.apply(null, altitudes);
   }
 }

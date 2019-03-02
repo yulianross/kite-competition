@@ -5,7 +5,8 @@ import { BleProvider } from '../../providers/ble/ble';
 import { MeasurementPage } from '../measurement/measurement';
 import { UserProvider } from '../../providers/user/user';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
-import * as moment from 'moment';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { ResumePage } from '../resume/resume';
 
 @Component({
   selector: 'page-home',
@@ -27,7 +28,7 @@ export class HomePage implements OnInit {
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     private blePrv: BleProvider,
-    private loadingCtrl: LoadingController,
+    private loaderPrv: LoaderProvider,
     private userPrv: UserProvider,
     private firebasePrv: FirebaseProvider) {
       console.log('home page');
@@ -50,35 +51,33 @@ export class HomePage implements OnInit {
   }
 
   connectRaspberry(device) {
-    const loader = this.loadingCtrl.create({
-      content: `connecting to ${device.name || 'device'}...`,
-      dismissOnPageChange: true
-    });
-
-    return new Promise((resolve, reject) => {
-      loader.present()
-        .then(() => {
-          this.blePrv.connect(device)
-            .then(() => {
-              resolve();
-            })
-            .catch(() => {
-              console.log('ha habido algun probema');
-              loader.dismiss();
-              reject();
-            });
-        });
-    });
+    return this.blePrv.connect(device);
   }
 
   deviceSelected(device) {
-    this.connectRaspberry(device)
+    this.loaderPrv.startLoader('connecting...')
+    .then(() => {
+      this.connectRaspberry(device)
       .then(() => {
+        console.log('conectado correctamente');
+        this.loaderPrv.dismissLoader();
         this.navCtrl.push(MeasurementPage);
       })
       .catch(() => {
-        console.log('hubo algun problema de conexión');
+        console.log('error al conectarse');
+        this.loaderPrv.dismissLoader();
       });
+    });
+  }
+
+  disconnect() {
+    this.blePrv.disconnect()
+    .then(() => {
+      console.log('desconectado correctamente');
+    })
+    .catch(() => {
+      console.log('error de desconexion');
+    });
   }
 
   scanDevices() {

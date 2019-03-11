@@ -15,6 +15,5 @@ export class GoogleMapComponent {
   @Input('lng') lng : Number;
 
   constructor() {
-    console.log('Hello GoogleMapComponent Component');
   }
 }

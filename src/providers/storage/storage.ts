@@ -9,8 +9,6 @@ export class StorageProvider {
   constructor(
     private storage: Storage,
     private platform: Platform) {
-
-    console.log('Hello StorageProvider Provider');
   }
 
   getStorage(name) {

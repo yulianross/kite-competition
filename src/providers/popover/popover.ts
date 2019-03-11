@@ -9,8 +9,6 @@ export class PopoverProvider {
 
   constructor(
     private popoverCtrl: PopoverController) {
-
-    console.log('Hello PopoverProvider Provider');
   }
 
   openPopover(event, component, componentParams) {

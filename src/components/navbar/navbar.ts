@@ -14,7 +14,6 @@ export class NavbarComponent {
   @Output() private onClick = new EventEmitter<any>();
 
   constructor() { 
-    console.log('Hello NavbarComponent Component');
   }
 
   click(event) {

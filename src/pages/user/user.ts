@@ -19,8 +19,4 @@ export class UserPage {
       this.user = this.userPrv.user;
 
   }
-
-  onImageLoad(event) {
-    console.log(event);
-  }
 }

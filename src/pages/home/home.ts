@@ -31,13 +31,11 @@ export class HomePage implements OnInit {
     private loaderPrv: LoaderProvider,
     private userPrv: UserProvider,
     private firebasePrv: FirebaseProvider) {
-      console.log('home page');
       
   }
 
   ngOnInit() {
     if (!this.userPrv.userfirebaseLoaded) {
-      console.log('cargando usuario de firebase');
       this.firebasePrv.loadUser()
       .then(() => {
         const toast = this.toastCtrl.create({
@@ -59,25 +57,17 @@ export class HomePage implements OnInit {
     .then(() => {
       this.connectRaspberry(device)
       .then(() => {
-        console.log('conectado correctamente');
         this.loaderPrv.dismissLoader();
         this.navCtrl.push(MeasurementPage);
       })
       .catch(() => {
-        console.log('error al conectarse');
         this.loaderPrv.dismissLoader();
       });
     });
   }
 
   disconnect() {
-    this.blePrv.disconnect()
-    .then(() => {
-      console.log('desconectado correctamente');
-    })
-    .catch(() => {
-      console.log('error de desconexion');
-    });
+    this.blePrv.disconnect();
   }
 
   scanDevices() {
@@ -88,13 +78,7 @@ export class HomePage implements OnInit {
         this.blePrv.scan();
       })
       .catch(() => {
-        this.blePrv.showBluetoothSettings()
-          .then((res) => {
-            console.log(res);
-          })
-          .catch(() => {
-            console.log('error al abrir los settings');
-          });
+        this.blePrv.showBluetoothSettings();
       });
   }
 

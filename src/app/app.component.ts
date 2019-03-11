@@ -71,7 +71,6 @@ export class MyApp {
           } else if(activeView.component === HomePage || activeView.component === LoginPage) {
             platform.exitApp();
           } else {
-            console.log('saliendo');
             nav.pop();
           }
         });

@@ -21,7 +21,6 @@ export class DisplayComponent implements OnChanges {
   maxValue: number = 0;
 
   constructor() {
-    console.log('Hello DisplayComponent Component');
   }
 
   ngOnChanges() {

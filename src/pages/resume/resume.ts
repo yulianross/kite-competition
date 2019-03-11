@@ -72,10 +72,6 @@ export class ResumePage {
       .then((resp) => {
         this.coords.lat = resp.coords.latitude;
         this.coords.lng = resp.coords.longitude;
-        console.log(resp);
-      })
-      .catch((err) => {
-        console.log('error locaion: ', err);
       });
   }
 
@@ -119,10 +115,7 @@ export class ResumePage {
       ],
       buttons: [
         {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
+          text: 'Cancel'
         },
         {
           text: 'Save',

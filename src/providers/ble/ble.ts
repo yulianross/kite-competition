@@ -82,7 +82,6 @@ export class BleProvider {
         );
 
         this.firstTime = moment();
-        console.log('onConnected');
         return resolve();
       } else {
         return reject();
@@ -106,11 +105,9 @@ export class BleProvider {
     return new Promise((resolve, reject) => {
       this.connectObservable = this.ble.connect(device.id)
       .subscribe((peripheral) => {
-        console.log('connected');
         this.resetProperties();
         this.onConnected(peripheral, resolve, reject)
       }, (err) => {
-        console.log(err);
         this.onDeviceDisconnected(reject)
       });
     });   
@@ -119,20 +116,13 @@ export class BleProvider {
   disconnect() {
     return this.ble.isConnected(this.peripheral.id)
     .then((connected) => {
-      //console.log('connected', connected);
-
       if (connected === 'OK') {
         this.ble.disconnect(this.peripheral.id)
         .then(() => {
-            console.log('Disconnected ');
             this.peripheral = {};
             this.connectObservable.unsubscribe();
-          }),
-          () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))
+          });
       }
-    })
-    .catch((err) => {
-      console.log('error al desconectarse', err);
     });
   }
 
@@ -170,12 +160,8 @@ export class BleProvider {
         this.ble.stopNotification(this.peripheral.id, this.notifyCharacteristic.service, this.notifyCharacteristic.characteristic)
         .then(() => {
           this.notifyCharacteristic = {};
-          console.log('stopNotify');
         });
       }
-    })
-    .catch(() => {
-      console.log('error al saber si está conectado');
     }); 
   }
 

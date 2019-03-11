@@ -20,7 +20,6 @@ export class GlobalRankingPage  {
       .valueChanges()
       .subscribe((users) => {
         this.bestExperiences = this.getExperiences(users);
-        console.log('constructor');
       });
   }
 

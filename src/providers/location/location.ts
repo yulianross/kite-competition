@@ -5,9 +5,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 export class LocationProvider {
 
   constructor(
-    private geolocation: Geolocation
-  ) {
-    console.log('Hello LocationProvider Provider');
+    private geolocation: Geolocation) {
   }
 
   initGeolocation() {

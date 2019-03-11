@@ -9,7 +9,6 @@ export class LoaderProvider {
 
   constructor(
     private loadingCtrl: LoadingController) {
-      console.log('loader provider');
   }
 
   startLoader(label: string) {

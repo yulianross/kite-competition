@@ -3,7 +3,7 @@
   <text x=22 y=3 font-size="4" text-anchor="middle">
     {{ title }}
   </text>
-  <text x="22" y="22" font-size="15" text-anchor="middle" alignment-baseline="central">
+  <text x="22" y="22" font-size="15" text-anchor="middle" alignment-baseline="central" [ngClass]="{'blink': blink}">
     {{ value }}
   </text >
   <text x="22" y="30" font-size="3" text-anchor="middle" alignment-baseline="central">

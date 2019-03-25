@@ -3,9 +3,12 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, PopoverController, AlertController } from 'ionic-angular';
 import { NavbarPopoverComponent } from '../../components/navbar-popover/navbar-popover';
 import { LocationProvider } from '../../providers/location/location';
-import { BleProvider } from '../../providers/ble/ble';
-import { StorageProvider } from '../../providers/storage/storage';
 import { HomePage } from '../home/home';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { PopoverProvider } from '../../providers/popover/popover';
+
+import * as utils from '../../utils/utils';
 
 @Component({
   selector: 'page-resume',
@@ -53,15 +56,16 @@ export class ResumePage {
     public navParams: NavParams,
     public popoverCtrl: PopoverController,
     private locationPrv: LocationProvider,
-    private blePvr: BleProvider,
-    private storagePrv: StorageProvider,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private firebasePrv: FirebaseProvider,
+    private loaderPrv: LoaderProvider,
+    private popoverPrv: PopoverProvider) {
       
-    this.altitudes = this.blePvr.altitudeValues;
-    const lastTimeValue = this.blePvr.altitudeValues[this.blePvr.altitudeValues.length -1].x;
+    this.altitudes = this.navParams.get('altitudes');
+    const lastTimeValue = this.altitudes[this.altitudes.length -1].x;
     const formattedTime = moment().startOf('day').seconds(lastTimeValue).format('HH:mm:ss');
     this.totalTimeText = `Total time: ${formattedTime}`;
-    this.maxAltitude = this.getMaxAltitude(this.altitudes);
+    this.maxAltitude = utils.getMaxAltitude(this.altitudes);
     this.date = moment(new Date());
 
     // get geolocation
@@ -69,10 +73,6 @@ export class ResumePage {
       .then((resp) => {
         this.coords.lat = resp.coords.latitude;
         this.coords.lng = resp.coords.longitude;
-        console.log(resp);
-      })
-      .catch((err) => {
-        console.log('error locaion: ', err);
       });
   }
 
@@ -87,19 +87,13 @@ export class ResumePage {
   }
 
   openPopover(event: any) {
-    const popover = this.popoverCtrl.create(
-      NavbarPopoverComponent,
-      { items: this.items });
-
-    popover.present({
-      ev: event
-    });
-
-    popover.onWillDismiss((action) => {
+    this.popoverPrv.openPopover(event, NavbarPopoverComponent, { items: this.items });
+    this.popoverPrv.onWillDismissEvent()
+    .then((action) => {
       if (action === 'save') {
         this.save();
       } else if (action === 'dismiss') {
-        this.dismiss();
+        this.goToHome();
       }
     });
   }
@@ -116,10 +110,7 @@ export class ResumePage {
       ],
       buttons: [
         {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
+          text: 'Cancel'
         },
         {
           text: 'Save',
@@ -132,10 +123,16 @@ export class ResumePage {
               altitudeValue: this.maxAltitude,
               coords: this.coords
             };
-            this.storagePrv.addExperience(this.experiencie)
+            
+            this.loaderPrv.startLoader('saving experience...')
             .then(() => {
-              // quitar ruleta de carga
-              this.goToHome();
+              this.firebasePrv.saveExperience(this.experiencie)
+              .then(() => {
+                this.loaderPrv.dismissLoader()
+                .then(() => {
+                  this.goToHome();
+                });
+              });  
             });    
           }
         }
@@ -145,20 +142,11 @@ export class ResumePage {
     prompt.present();
   }
 
-  dismiss() {
-    this.goToHome();
-  }
-
   goToHome() {
     this.navCtrl.setRoot(HomePage);
   }
 
-  getMaxAltitude(data) {
-
-    const altitudes = data.map((altitude) => {
-      return altitude.y;
-    });
-
-    return Math.max.apply(null, altitudes);
+  dismiss() {
+    this.goToHome();
   }
 }

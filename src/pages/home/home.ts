@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ToastController, LoadingController } from 'ionic-angular';
-import { LocationProvider } from '../../providers/location/location';
 import { BleProvider } from '../../providers/ble/ble';
 import { MeasurementPage } from '../measurement/measurement';
+import { UserProvider } from '../../providers/user/user';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { UsbProvider } from '../../providers/usb/usb';
+
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
   /**
    * menuActive property
@@ -18,47 +23,58 @@ export class HomePage {
   menuActive: boolean = true;
 
   showInfoScan: boolean = true;
+  currentAltitude: number = 0;
+  mode: string = 'bluetooth';
+  elementos: any[] = [];
 
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     private blePrv: BleProvider,
-    private loadingCtrl: LoadingController,
-    public locationPrv: LocationProvider) {
+    private loaderPrv: LoaderProvider,
+    private userPrv: UserProvider,
+    private firebasePrv: FirebaseProvider,
+    private usbPrv: UsbProvider) {
+ 
+  }
 
-    this.locationPrv.initGeolocation();
+  ngOnInit() {
+    if (!this.userPrv.userfirebaseLoaded) {
+      this.firebasePrv.loadUser()
+      .then(() => {
+        const toast = this.toastCtrl.create({
+          message: `Welcome ${this.userPrv.user.displayName}!`,
+          position: 'bottom',
+          duration: 3000
+        });
+        toast.present();
+      });
+    } 
+    for(let i=0; i<1000; i++){
+      this.elementos.push(`item ${i}`);
+    }
   }
 
   connectRaspberry(device) {
-    const loader = this.loadingCtrl.create({
-      content: `connecting to ${device.name || 'device'}...`,
-      dismissOnPageChange: true
-    });
-
-    return new Promise((resolve, reject) => {
-      loader.present()
-        .then(() => {
-          this.blePrv.connect(device)
-            .then(() => {
-              resolve();
-            })
-            .catch(() => {
-              console.log('ha habido algun probema');
-              loader.dismiss();
-              reject();
-            });
-        });
-    });
+    return this.blePrv.connect(device);
   }
 
   deviceSelected(device) {
-    this.connectRaspberry(device)
+    this.loaderPrv.startLoader('connecting...')
+    .then(() => {
+      this.connectRaspberry(device)
       .then(() => {
-        this.navCtrl.push(MeasurementPage);
+        this.loaderPrv.dismissLoader();
+        this.navCtrl.push(MeasurementPage, { connection: 'bluetooth' });
       })
       .catch(() => {
-        console.log('hubo algun problema de conexión');
+        this.loaderPrv.dismissLoader();
       });
+    });
+  }
+
+  disconnect() {
+    this.blePrv.disconnect();
   }
 
   scanDevices() {
@@ -69,13 +85,31 @@ export class HomePage {
         this.blePrv.scan();
       })
       .catch(() => {
-        this.blePrv.showBluetoothSettings()
-          .then((res) => {
-            console.log(res);
-          })
-          .catch(() => {
-            console.log('error al abrir los settings');
-          });
+        this.blePrv.showBluetoothSettings();
       });
+  }
+
+  connectUsb() {
+    this.loaderPrv.startLoader('connecting...')
+    .then(() => {
+      this.usbPrv.connect()
+      .then(() => {
+        this.loaderPrv.dismissLoader();
+        this.navCtrl.push(MeasurementPage, { connection: 'usb' });
+      })
+      .catch((err) => {
+        this.loaderPrv.dismissLoader();
+        this.showUsbError(err);
+      })
+    });
+  }
+
+  showUsbError(error) {
+    let toast = this.toastCtrl.create({
+      message: error,
+      position: 'bottom',
+      duration: 3000
+    });
+    toast.present();
   }
 }

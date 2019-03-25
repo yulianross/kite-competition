@@ -40,7 +40,9 @@ $colors: (
   light:      #f4f4f4,
   dark:       #1f1d1d,
   blue:       #073aa8,
-  default:    #09b1c7
+  default:    #09b1c7,
+  google:     #dd4b39,
+  facebook:   #3b5998
 );
 
 
@@ -58,7 +60,7 @@ $colors: (
 $loading-md-spinner-color: color($colors, default);
 $alert-md-button-text-color: color($colors, default);
 $alert-md-input-border-color-focused: color($colors, default);
-
+$segment-button-md-border-bottom-width: 3px;
 // App Windows Variables
 // --------------------------------------------------
 // Windows only Sass variables can go here

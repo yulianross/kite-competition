@@ -1,6 +1,6 @@
 <ion-header>
   <navbar 
-    [title]="blePrv.peripheral.name" 
+    [title]="connection === 'bluetooth' ? blePrv.peripheral.name : 'usb device'" 
     (onClick)="goToHome($event)">
   </navbar>
 </ion-header>
@@ -9,16 +9,17 @@
   <div padding-top>
     <display 
       title="Altitude" 
-      [value]="blePrv.currentAltitude" 
-      unit="metres">
+      [value]="connection === 'bluetooth' ? blePrv.currentAltitude : usbPrv.currentAltitude" 
+      unit="metres"
+      rangeBlink=50>
     </display>
   </div>
   <br>
   <ion-buttons padding>
-    <button ion-button block outline color="danger" (click)="disconnect()">Stop connection</button>
+    <button ion-button block outline color="danger" (click)="finishFlight()">Stop connection</button>
   </ion-buttons>
 </ion-content>
 
 <ion-footer>
-  <footer label="Capsule Corp *"></footer>
+  <footer label="Capsule Corp"></footer>
 </ion-footer>

@@ -8,12 +8,21 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { BLE } from '@ionic-native/ble';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
+import { Facebook } from '@ionic-native/facebook';
+import { GooglePlus } from '@ionic-native/google-plus';
+import { IonicImageLoader } from 'ionic-image-loader';
+import { Serial } from '@ionic-native/serial';
 
 // providers
 
 import { BleProvider } from '../providers/ble/ble';
 import { LocationProvider } from '../providers/location/location';
 import { StorageProvider } from '../providers/storage/storage';
+import { UserProvider } from '../providers/user/user';
+import { LoaderProvider } from '../providers/loader/loader';
+import { FirebaseProvider } from '../providers/firebase/firebase';
+import { PopoverProvider } from '../providers/popover/popover';
+
 
 // components
 import { ComponentsModule } from '../components/components.module';
@@ -26,10 +35,20 @@ import { ResumePage } from '../pages/resume/resume';
 import { MyExperiencesPage } from '../pages/my-experiences/my-experiences';
 import { MeasurementPage } from '../pages/measurement/measurement';
 import { DetailExperiencePage } from '../pages/detail-experience/detail-experience';
+import { LoginPage } from '../pages/login/login';
+import { UserPage } from '../pages/user/user';
+import { GlobalRankingPage } from '../pages/global-ranking/global-ranking';
+
 
 // pipes
 import { TruncateModule } from 'ng2-truncate';
 
+// firebase
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
+import { firebaseConfig } from '../config/firebase';
+import { UsbProvider } from '../providers/usb/usb';
 
 
 @NgModule({
@@ -39,14 +58,21 @@ import { TruncateModule } from 'ng2-truncate';
     ResumePage,
     MyExperiencesPage,
     MeasurementPage,
-    DetailExperiencePage
+    DetailExperiencePage,
+    LoginPage,
+    UserPage,
+    GlobalRankingPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     ComponentsModule,
-    TruncateModule 
+    TruncateModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    IonicImageLoader.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -56,17 +82,30 @@ import { TruncateModule } from 'ng2-truncate';
     MyExperiencesPage,
     MeasurementPage,
     DetailExperiencePage,
+    LoginPage,
+    UserPage,
+    GlobalRankingPage,
     NavbarPopoverComponent
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     BLE,
-    BleProvider,
+    Serial,
     Geolocation,
+    Facebook,
+    GooglePlus,
+    LoaderProvider,
+    { provide: FirestoreSettingsToken, useValue: {}},
+    FirebaseProvider,
+    BleProvider,
     LocationProvider,
-    StorageProvider
+    StorageProvider,
+    UserProvider,
+    PopoverProvider,
+    UsbProvider,
+    
   ]
 })
 export class AppModule {}

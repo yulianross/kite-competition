@@ -56,9 +56,9 @@ export class BleProvider {
    // If location permission is denied, you'll end up here
    scanError(error) {
     let toast = this.toastCtrl.create({
-      message: 'Error scanning for Bluetooth low energy devices',
-      position: 'middle',
-      duration: 5000
+      message: error,
+      position: 'bottom',
+      duration: 3000
     });
     toast.present();
   }

@@ -35,7 +35,7 @@ export class UserProvider {
 
   signInWithFacebook() {
     if (this.platform.is('cordova')) {
-      return this.fb.login(['email', 'public_profile'])
+      return this.fb.login(['email', 'public_profile', 'user_friends'])
         .then(res => {
           const facebookCredential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
 
@@ -48,6 +48,9 @@ export class UserProvider {
                   return this.loaderPrv.dismissLoader();
                 });
             });
+        })
+        .catch((err) => {
+          console.log('error: ', err);
         });
     } else {
       return this.loaderPrv.startLoader('logging in...')

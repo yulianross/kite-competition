@@ -11,6 +11,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { IonicImageLoader } from 'ionic-image-loader';
+import { Serial } from '@ionic-native/serial';
 
 // providers
 
@@ -47,6 +48,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { firebaseConfig } from '../config/firebase';
+import { UsbProvider } from '../providers/usb/usb';
 
 
 @NgModule({
@@ -90,6 +92,7 @@ import { firebaseConfig } from '../config/firebase';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     BLE,
+    Serial,
     Geolocation,
     Facebook,
     GooglePlus,
@@ -101,6 +104,7 @@ import { firebaseConfig } from '../config/firebase';
     StorageProvider,
     UserProvider,
     PopoverProvider,
+    UsbProvider,
     
   ]
 })

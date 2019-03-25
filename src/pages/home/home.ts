@@ -6,7 +6,8 @@ import { MeasurementPage } from '../measurement/measurement';
 import { UserProvider } from '../../providers/user/user';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
-import { ResumePage } from '../resume/resume';
+import { UsbProvider } from '../../providers/usb/usb';
+
 
 @Component({
   selector: 'page-home',
@@ -23,6 +24,8 @@ export class HomePage implements OnInit {
 
   showInfoScan: boolean = true;
   currentAltitude: number = 0;
+  mode: string = 'bluetooth';
+  elementos: any[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -30,8 +33,9 @@ export class HomePage implements OnInit {
     private blePrv: BleProvider,
     private loaderPrv: LoaderProvider,
     private userPrv: UserProvider,
-    private firebasePrv: FirebaseProvider) {
-      
+    private firebasePrv: FirebaseProvider,
+    private usbPrv: UsbProvider) {
+ 
   }
 
   ngOnInit() {
@@ -46,6 +50,9 @@ export class HomePage implements OnInit {
         toast.present();
       });
     } 
+    for(let i=0; i<1000; i++){
+      this.elementos.push(`item ${i}`);
+    }
   }
 
   connectRaspberry(device) {
@@ -58,7 +65,7 @@ export class HomePage implements OnInit {
       this.connectRaspberry(device)
       .then(() => {
         this.loaderPrv.dismissLoader();
-        this.navCtrl.push(MeasurementPage);
+        this.navCtrl.push(MeasurementPage, { connection: 'bluetooth' });
       })
       .catch(() => {
         this.loaderPrv.dismissLoader();
@@ -82,7 +89,27 @@ export class HomePage implements OnInit {
       });
   }
 
-  initCounter() {
-    this.currentAltitude += 1;
+  connectUsb() {
+    this.loaderPrv.startLoader('connecting...')
+    .then(() => {
+      this.usbPrv.connect()
+      .then(() => {
+        this.loaderPrv.dismissLoader();
+        this.navCtrl.push(MeasurementPage, { connection: 'usb' });
+      })
+      .catch((err) => {
+        this.loaderPrv.dismissLoader();
+        this.showUsbError(err);
+      })
+    });
+  }
+
+  showUsbError(error) {
+    let toast = this.toastCtrl.create({
+      message: error,
+      position: 'bottom',
+      duration: 3000
+    });
+    toast.present();
   }
 }

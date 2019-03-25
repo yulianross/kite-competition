@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.javieraldana.kiteCompetition001" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.javieraldana.kiteCompetition001" version="1.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>kite competition</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="j.aldana.corchon@gmail.com" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -101,4 +101,9 @@
         <variable name="PLAY_SERVICES_VERSION" value="11.8.0" />
     </plugin>
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <plugin name="cordovarduino" spec="0.0.10" />
+    <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
+        <variable name="APP_ID" value="599588207154010" />
+        <variable name="APP_NAME" value="loginKiteCompetition" />
+    </plugin>
 </widget>

@@ -1,43 +1,77 @@
 <ion-header>
-  <navbar title="Kite competition" menu=true iconLabel="scan" icon="bluetooth" (onClick)="scanDevices($event)">
+  <navbar title="Kite competition" menu=true [iconLabel]="mode === 'bluetooth' ? 'scan' : undefined"
+    [icon]="mode === 'bluetooth' ? 'bluetooth' : undefined" (onClick)="scanDevices($event)">
   </navbar>
+  <ion-toolbar no-border-top color="dark">
+    <ion-segment [(ngModel)]="mode" color="default">
+      <ion-segment-button value="bluetooth">
+        <ion-icon name="bluetooth"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="usb">
+        <ion-icon name="git-branch"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let device of blePrv.devices">
-      <ion-row>
-        <ion-col>
-          <h2>{{ device.name || 'Unnamed' | truncate : 19 : "..."  }}</h2>
-          <p>{{ device.id }}</p>
-          <p>RSSI: {{ device.rssi }}</p>
-        </ion-col>
-        <ion-col text-end>
-          <button ion-button outline icon-start color="default" (click)="deviceSelected(device)">
-            <ion-icon name="wifi"></ion-icon>
-            connect
-          </button>
-        </ion-col>
-      </ion-row>
-    </ion-item>
-  </ion-list>
-  <ion-grid *ngIf="showInfoScan && blePrv.devices.length === 0">
-    <ion-row>
-      <ion-col text-center>
-        <h5>Find your device</h5>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col text-center>
-        <button ion-button outline icon-end color="default" (click)="scanDevices()">
-          Scan
-          <ion-icon name="bluetooth"></ion-icon>
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+ <div [ngSwitch]="mode">
+    <div *ngSwitchCase="'bluetooth'">
+        <ion-list *ngIf="blePrv.devices.length > 0">
+          <ion-item *ngFor="let device of blePrv.devices">
+            <ion-row>
+              <ion-col>
+                <h2>{{ device.name || 'Unnamed' | truncate : 19 : "..."  }}</h2>
+                <p>{{ device.id }}</p>
+                <p>RSSI: {{ device.rssi }}</p>
+              </ion-col>
+              <ion-col text-end>
+                <button ion-button outline icon-start color="default" (click)="deviceSelected(device)">
+                  <ion-icon name="wifi"></ion-icon>
+                  connect
+                </button>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+        <ion-grid *ngIf="showInfoScan && blePrv.devices.length === 0">
+          <ion-row>
+            <ion-col text-center>
+              <h5>Find your device</h5>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col text-center>
+              <button ion-button outline icon-end color="default" (click)="scanDevices()">
+                Scan
+                <ion-icon name="bluetooth"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    
+      <div *ngSwitchCase="'usb'">
+        <ion-grid >
+          <ion-row>
+            <ion-col text-center>
+              <h5>Plug and connect your device</h5>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col text-center>
+              <button ion-button outline icon-end color="default" (click)="connectUsb()">
+                Connect
+                <ion-icon name="git-branch"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+ </div>
+ 
 </ion-content>
 
 <ion-footer>
-  <footer label="Capsule Corp "></footer>
+  <footer label="Capsule Corp"></footer>
 </ion-footer>

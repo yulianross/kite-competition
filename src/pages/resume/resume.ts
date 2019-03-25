@@ -3,10 +3,11 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, PopoverController, AlertController } from 'ionic-angular';
 import { NavbarPopoverComponent } from '../../components/navbar-popover/navbar-popover';
 import { LocationProvider } from '../../providers/location/location';
-import { BleProvider } from '../../providers/ble/ble';
 import { HomePage } from '../home/home';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
+import { PopoverProvider } from '../../providers/popover/popover';
+
 import * as utils from '../../utils/utils';
 
 @Component({
@@ -55,13 +56,13 @@ export class ResumePage {
     public navParams: NavParams,
     public popoverCtrl: PopoverController,
     private locationPrv: LocationProvider,
-    private blePrv: BleProvider,
     private alertCtrl: AlertController,
     private firebasePrv: FirebaseProvider,
-    private loaderPrv: LoaderProvider) {
+    private loaderPrv: LoaderProvider,
+    private popoverPrv: PopoverProvider) {
       
-    this.altitudes = this.blePrv.altitudeValues;
-    const lastTimeValue = this.blePrv.altitudeValues[this.blePrv.altitudeValues.length -1].x;
+    this.altitudes = this.navParams.get('altitudes');
+    const lastTimeValue = this.altitudes[this.altitudes.length -1].x;
     const formattedTime = moment().startOf('day').seconds(lastTimeValue).format('HH:mm:ss');
     this.totalTimeText = `Total time: ${formattedTime}`;
     this.maxAltitude = utils.getMaxAltitude(this.altitudes);
@@ -86,15 +87,9 @@ export class ResumePage {
   }
 
   openPopover(event: any) {
-    const popover = this.popoverCtrl.create(
-      NavbarPopoverComponent,
-      { items: this.items });
-
-    popover.present({
-      ev: event
-    });
-
-    popover.onWillDismiss((action) => {
+    this.popoverPrv.openPopover(event, NavbarPopoverComponent, { items: this.items });
+    this.popoverPrv.onWillDismissEvent()
+    .then((action) => {
       if (action === 'save') {
         this.save();
       } else if (action === 'dismiss') {

@@ -43,7 +43,7 @@ export class DetailExperiencePage {
   openPopover(event: any) {
     const paramsPopover = {
       items: this.items,
-        menuActive: this.menuActive 
+      menuActive: this.menuActive 
     }
     this.popoverPrv.openPopover(event, NavbarPopoverComponent, paramsPopover);
     this.popoverPrv.onWillDismissEvent()

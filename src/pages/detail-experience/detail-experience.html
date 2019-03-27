@@ -15,8 +15,8 @@
       </ion-card-header>
       <ion-card-content>
         <line-chart 
-          [title]="experience.totalTime" 
-          legend="Altitude(m)" 
+          title="Altitude(m)"
+          [subtitle]="experience.totalTime" 
           labelX="time(seconds)" 
           [data]="experience.altitudes">
         </line-chart>

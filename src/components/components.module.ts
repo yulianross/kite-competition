@@ -9,8 +9,7 @@ import { NavbarPopoverComponent } from './navbar-popover/navbar-popover';
 import { LineChartComponent } from './line-chart/line-chart';
 import { MenuComponent } from './menu/menu';
 
-// charts
-import { ChartsModule } from 'ng2-charts';
+// google maps
 import { GoogleMapComponent } from './google-map/google-map';
 
 // google maps
@@ -19,6 +18,7 @@ import { AgmCoreModule } from '@agm/core';
 // pipes
 import { TruncateModule } from 'ng2-truncate';
 
+import { HighchartsChartModule } from 'highcharts-angular';
 @NgModule({
         declarations: [
                 NavbarComponent,
@@ -32,11 +32,11 @@ import { TruncateModule } from 'ng2-truncate';
 
          imports: [
                 IonicModule, 
-                ChartsModule,
                 AgmCoreModule.forRoot({
                         apiKey: 'AIzaSyATjj5sEL6bUg-9eRkI2A_r2upscMaBHnA'
                 }),
-                TruncateModule
+                TruncateModule,
+                HighchartsChartModule
         ],
     
 	exports: [

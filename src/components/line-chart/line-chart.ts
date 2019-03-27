@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as utils from '../../utils/utils';
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'line-chart',
@@ -7,73 +7,65 @@ import * as utils from '../../utils/utils';
 })
 export class LineChartComponent implements OnInit {
 
-  @Input('data') data : Array<any>;
-  @Input('legend') legend : string = "";
-  @Input('labelX') labelX : string = "";
-  @Input('title') title : string = "";
+  @Input('title') title: string = "";
+  @Input('data') data: Array<any>;
+  @Input('labelX') labelX: string = "";
+  @Input('subtitle') subtitle: string = "";
 
-  // lineChart variables
-  private lineChartData:Array<any>;
-  private lineChartLabels:Array<any>;
-  private lineChartOptions:any;
-  private lineChartColors:Array<any>;
-  private lineChartLegend:boolean;
-  private lineChartType:string = 'line';
-
-  constructor() {
-
-  }
+  Highcharts: any;
+  chartOptions: any;
 
   ngOnInit() {
-    
-    this.lineChartData = [{
-      data: this.data, 
-      label: this.legend
-    }];
-
-    this.lineChartOptions = {
-      responsive: true,
+    this.Highcharts = Highcharts;
+    this.chartOptions = {
+      chart: {
+        zoomType: 'x'
+      },
+      series: [{
+        name: '',
+        data: this.parseData(this.data),
+        type: 'spline'
+      }],
+      xAxis: {
+        title: {
+          text: this.labelX
+        }
+      },
+      yAxis: {
+        title: {
+          text: ''
+        }
+      },
+      boost: {
+        useGPUTranslations: true,
+        usePreallocated: true
+      },
+      colors: ['#09b1c7'],
       title: {
-        display: this.title || false,
         text: this.title
       },
-      scaleShowVerticalLines: true,
-      scales: {
-        yAxes: [{
-          display: true,
-          ticks: {
-            min: 0,
-            max: utils.getMaxAltitude(this.data),
-            stepSize: Math.round(utils.getMaxAltitude(this.data)/3)
+      subtitle: {
+        text: this.subtitle
+      },
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          animation: {
+            duration: 1800
           }
-        }],
-        xAxes: [{
-          type: 'linear',
-          scaleLabel: {
-            display: true,
-            labelString: this.labelX
-          },
-          
-          ticks: {
-            min: 0,
-            max: this.data[this.data.length - 1].x,
-            stepSize: Math.round(this.data[this.data.length - 1].x/7)
-          }
-        }] 
+        }
       }
     };
+  }
 
-    this.lineChartColors = [
-      { // grey
-        backgroundColor: 'rgba(9,177,199,0.2)',
-        borderColor: '#09b1c7',
-        pointBackgroundColor: '#09b1c7',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-      }
-    ];
-
-    this.lineChartLegend = this.legend !== "" || false;
+  private parseData(data) {
+    return data.map((experience) => {
+      return [experience.x, experience.y];
+    })
   }
 }

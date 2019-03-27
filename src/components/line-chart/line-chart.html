@@ -1,10 +1,6 @@
-<div style="display: block;">
-    <canvas baseChart width="400" height="300"
-        [datasets]="lineChartData"
-        [labels]="lineChartLabels"
-        [options]="lineChartOptions"
-        [colors]="lineChartColors"
-        [legend]="lineChartLegend"
-        [chartType]="lineChartType">
-    </canvas>
-</div>
+<highcharts-chart 
+  [Highcharts]="Highcharts"
+  [options]="chartOptions">
+</highcharts-chart>
+
+    

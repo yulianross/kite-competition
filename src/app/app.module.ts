@@ -51,6 +51,8 @@ import { firebaseConfig } from '../config/firebase';
 import { UsbProvider } from '../providers/usb/usb';
 
 
+
+
 @NgModule({
   declarations: [
     MyApp,

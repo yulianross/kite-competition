@@ -14,7 +14,6 @@ export class UsbProvider {
     private serial: Serial,
     private ngZone: NgZone) {
 
-    console.log('Hello UsbProvider Provider');
   }
 
   connect() {
@@ -42,7 +41,7 @@ export class UsbProvider {
     .subscribe((buffer) => {
       this.ngZone.run(() => {
         let data = new Int8Array(buffer);
-        console.log(data);
+
         if (data.length === 2) {
           this.currentAltitude = ((data[0] * 128) + data[1]) > 0 ? ((data[0] * 128) + data[1]) : 0;
           const now = moment();

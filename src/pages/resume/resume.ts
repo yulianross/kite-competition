@@ -1,12 +1,13 @@
 import * as moment from 'moment';
 import { Component } from '@angular/core';
-import { NavController, NavParams, PopoverController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, PopoverController } from 'ionic-angular';
 import { NavbarPopoverComponent } from '../../components/navbar-popover/navbar-popover';
 import { LocationProvider } from '../../providers/location/location';
 import { HomePage } from '../home/home';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { PopoverProvider } from '../../providers/popover/popover';
+import { AlertProvider } from '../../providers/alert/alert';
 
 import * as utils from '../../utils/utils';
 
@@ -56,11 +57,11 @@ export class ResumePage {
     public navParams: NavParams,
     public popoverCtrl: PopoverController,
     private locationPrv: LocationProvider,
-    private alertCtrl: AlertController,
     private firebasePrv: FirebaseProvider,
     private loaderPrv: LoaderProvider,
-    private popoverPrv: PopoverProvider) {
-      
+    private popoverPrv: PopoverProvider,
+    private alertPrv: AlertProvider) {
+    
     this.altitudes = this.navParams.get('altitudes');
     const lastTimeValue = this.altitudes[this.altitudes.length -1].x;
     const formattedTime = moment().startOf('day').seconds(lastTimeValue).format('HH:mm:ss');
@@ -99,7 +100,7 @@ export class ResumePage {
   }
 
   save() {
-    const prompt = this.alertCtrl.create({
+    const alertConfig = {
       title: 'Title',
       message: "Enter a name for the experience",
       inputs: [
@@ -137,9 +138,9 @@ export class ResumePage {
           }
         }
       ]
-    });
-
-    prompt.present();
+    }
+    
+    this.alertPrv.openAlert(alertConfig);
   }
 
   goToHome() {

@@ -22,7 +22,7 @@ import { UserProvider } from '../providers/user/user';
 import { LoaderProvider } from '../providers/loader/loader';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { PopoverProvider } from '../providers/popover/popover';
-
+import { AlertProvider } from '../providers/alert/alert';
 
 // components
 import { ComponentsModule } from '../components/components.module';
@@ -49,9 +49,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { firebaseConfig } from '../config/firebase';
 import { UsbProvider } from '../providers/usb/usb';
-
-
-
 
 @NgModule({
   declarations: [
@@ -107,6 +104,7 @@ import { UsbProvider } from '../providers/usb/usb';
     UserProvider,
     PopoverProvider,
     UsbProvider,
+    AlertProvider,
     
   ]
 })

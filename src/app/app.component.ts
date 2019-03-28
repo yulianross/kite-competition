@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { UserProvider } from '../providers/user/user';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { PopoverProvider } from '../providers/popover/popover';
+import { AlertProvider } from '../providers/alert/alert';
 
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../pages/home/home';
@@ -30,7 +31,8 @@ export class MyApp {
     userPrv: UserProvider,
     storage: Storage,
     firebasePrv: FirebaseProvider,
-    popoverPrv: PopoverProvider) {
+    popoverPrv: PopoverProvider,
+    alertPrv: AlertProvider) {
       
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -64,6 +66,10 @@ export class MyApp {
 
           if (popoverPrv.isOpen) {
             return popoverPrv.dismissPopover();
+          }
+
+          if(alertPrv.isOpen) {
+            return alertPrv.dismissAlert();
           }
 
           if(typeof activeView.instance.backButtonAction === 'function') {

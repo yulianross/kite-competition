@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { ToastController, LoadingController } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 import { BleProvider } from '../../providers/ble/ble';
 import { MeasurementPage } from '../measurement/measurement';
 import { UserProvider } from '../../providers/user/user';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { UsbProvider } from '../../providers/usb/usb';
-
+import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-home',
@@ -25,7 +25,6 @@ export class HomePage implements OnInit {
   showInfoScan: boolean = true;
   currentAltitude: number = 0;
   mode: string = 'bluetooth';
-  elementos: any[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -48,10 +47,8 @@ export class HomePage implements OnInit {
           duration: 3000
         });
         toast.present();
-      });
-    } 
-    for(let i=0; i<1000; i++){
-      this.elementos.push(`item ${i}`);
+      })
+      .catch(() => this.navCtrl.setRoot(LoginPage));
     }
   }
 
